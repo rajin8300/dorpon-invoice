@@ -1,6 +1,6 @@
 export type InvoiceStatus = 'draft' | 'booked' | 'partial' | 'paid' | 'overdue';
 
-export type TemplateTheme = 'minimal-light' | 'luxury-gold' | 'cinematic-dark' | 'royal-classic';
+export type TemplateTheme = 'luxury-gold' | 'minimal-light' | 'cinematic-dark' | 'royal-classic';
 
 export interface InvoiceItem {
   id: string;
@@ -9,6 +9,15 @@ export interface InvoiceItem {
   quantity: number;
   rate: number;
   total: number;
+}
+
+export interface PackageItem {
+  id: string;
+  title: string;
+  description: string;
+  rate: number;
+  category?: string;
+  isCustom?: boolean;
 }
 
 export interface BusinessInfo {
@@ -38,7 +47,11 @@ export interface PaymentDetails {
   bKashNumber: string;
   nagadNumber: string;
   rocketNumber?: string;
-  bankDetails: string;
+  bankName: string;
+  bankAccountName: string;
+  bankAccountNumber: string;
+  bankBranch: string;
+  bankDistrict: string;
   notes: string;
 }
 

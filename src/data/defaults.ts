@@ -1,60 +1,87 @@
-import { InvoiceData, InvoiceItem } from '../types/invoice';
+import { InvoiceData, PackageItem } from '../types/invoice';
 
 export const DEFAULT_TERMS: string[] = [
-  'Booking is confirmed upon receiving 50% advance payment.',
-  'Remaining balance must be cleared on the event day before leaving the venue.',
-  'All edited photos will be delivered within 15-21 working days.',
-  'Cinematic teaser & video highlights will be delivered within 30-40 working days.',
-  'Raw / unedited files will be provided via Cloud Drive / Portable SSD provided by client.',
-  'Travel, food, and lodging costs outside Rajbari are to be covered by the client.'
+  'Booking confirmation requires 50% advance payment.',
+  'Remaining balance must be cleared on event day before wrap-up.',
+  'All edited high-resolution photos delivered within 15-21 working days.',
+  'Cinematic 4K teaser & full highlights delivered within 30-40 working days.',
+  'Raw files delivered via Portable SSD or Cloud Drive link.',
+  'Travel, food, and accommodation outside Rajbari to be borne by client.'
 ];
 
-export const SERVICE_PRESETS: { title: string; desc: string; rate: number }[] = [
+export const INITIAL_PACKAGES: PackageItem[] = [
   {
+    id: 'pkg-1',
     title: 'Full Day Wedding Photography (Premium)',
-    desc: '2 Senior Photographers, Unlimited Raw Shots, 100+ Master Edited High-Res Photos',
-    rate: 22000
+    description: '2 Senior Photographers, Unlimited Raw Shots, 100+ Master Edited High-Res Photos, Stage & Candid Coverage',
+    rate: 22000,
+    category: 'Wedding',
+    isCustom: false,
   },
   {
+    id: 'pkg-2',
     title: 'Cinematic Wedding Teaser & Film (4K)',
-    desc: '2 Cinematographers, Gimbal & Prime Lenses, 1-2 Min Teaser + 10-15 Min Cinematic Highlights',
-    rate: 25000
+    description: '2 Cinematographers, Gimbal & Prime Lenses, 1-2 Min Instagram Teaser + 10-15 Min 4K Cinematic Highlights Film',
+    rate: 25000,
+    category: 'Cinematography',
+    isCustom: false,
   },
   {
-    title: 'Gaye Holud / Mehendi Night Coverage',
-    desc: '1 Senior Photographer + 1 Cinematographer, 4-5 hours coverage, Event Highlights Reel',
-    rate: 15000
+    id: 'pkg-3',
+    title: 'Gaye Holud / Mehendi Night Package',
+    description: '1 Senior Photographer + 1 Cinematographer, 4-5 Hours Event Coverage, Color Graded Reel & Photos',
+    rate: 15000,
+    category: 'Holud',
+    isCustom: false,
   },
   {
-    title: 'Reception Evening Package',
-    desc: '2 Photographers + 1 Cinematographer, Stage & Candid coverage, 60+ Edited Photos',
-    rate: 18000
+    id: 'pkg-4',
+    title: 'Reception Evening Grand Coverage',
+    description: '2 Photographers + 1 Cinematographer, Stage, Couple & Guest Portraits, 80+ Retouched Photos',
+    rate: 18000,
+    category: 'Reception',
+    isCustom: false,
   },
   {
-    title: 'Exclusive Couple Portrait Session',
-    desc: 'Pre/Post wedding outdoor/indoor stylized shoot, 30 Fine Art Retouched Photos',
-    rate: 10000
+    id: 'pkg-5',
+    title: 'Exclusive Pre/Post Wedding Couple Shoot',
+    description: 'Stylized outdoor couple portrait session, 30 Fine Art Retouched Magazine-Style Photos',
+    rate: 10000,
+    category: 'Portrait',
+    isCustom: false,
   },
   {
-    title: 'Premium Photo Album (12x24 inch)',
-    desc: '20 Pages Hardbound, Velvet/Leatherette Cover, Waterproof Metallic Lamination',
-    rate: 8000
+    id: 'pkg-6',
+    title: 'Exclusive Flush Mount Photo Album (12x24 inch)',
+    description: '30 Pages Hardbound, Velvet/Leatherette Box, Metallic Lamination, Archival Silk Paper',
+    rate: 8000,
+    category: 'Album',
+    isCustom: false,
   },
   {
-    title: '4K Drone / Aerial Cinematography',
-    desc: 'FAA certified pilot, Venue & Event bird-eye footage, cinematic flyovers',
-    rate: 7000
+    id: 'pkg-7',
+    title: '4K Drone Aerial Cinematography',
+    description: 'FAA Certified Aerial Pilot, Venue Bird-Eye Views, Cinematic Flyover Angles & Ceremony Entrance',
+    rate: 7000,
+    category: 'Drone',
+    isCustom: false,
   },
   {
-    title: 'Traditional Long Video Coverage',
-    desc: 'Complete ceremony recording with crisp audio feed, delivered in 1080p Full HD',
-    rate: 12000
+    id: 'pkg-8',
+    title: 'Traditional Long Ceremony Video Coverage',
+    description: 'Full unedited ceremony recording with high-fidelity lapel audio, delivered in 1080p HD',
+    rate: 12000,
+    category: 'Video',
+    isCustom: false,
   }
 ];
 
+export const SERVICE_PRESETS = INITIAL_PACKAGES;
+
+
 export const LOGO_OPTIONS = [
-  { id: 'logo-black.png', label: 'Dark Logo (Transparent)', src: '/logo/logo-black.png', type: 'dark' },
   { id: 'logo-gold.png', label: 'Gold Logo (Transparent)', src: '/logo/logo-gold.png', type: 'gold' },
+  { id: 'logo-black.png', label: 'Dark Logo (Transparent)', src: '/logo/logo-black.png', type: 'dark' },
   { id: 'logo-cream.png', label: 'Cream Logo (Transparent)', src: '/logo/logo-cream.png', type: 'light' },
   { id: 'logo-white.png', label: 'White Logo (Transparent)', src: '/logo/logo-white.png', type: 'light' },
   { id: 'logo-mark.png', label: 'Icon Mark', src: '/logo/logo-mark.png', type: 'mark' },
@@ -85,18 +112,18 @@ export const getInitialInvoiceData = (): InvoiceData => {
       website: 'rajinmd.com',
       phone: '01740-744170',
       email: 'contact@rajinmd.com',
-      address: 'Rajbari, Bangladesh',
+      address: 'Rajbari, Faridpur, Dhaka',
       facebook: 'facebook.com/dorpon830',
       instagram: '@rajin.830',
-      logoType: 'logo-black.png',
+      logoType: 'logo-gold.png',
     },
     client: {
       name: 'Nafis & Sadia Wedding',
       phone: '01812-345678',
-      email: 'nafis.wed@gmail.com',
+      email: 'client@gmail.com',
       eventType: 'Wedding & Reception Coverage',
       eventDate: formatDate(nextMonth),
-      eventVenue: 'Rajbari Officers Club Banquet Hall',
+      eventVenue: 'Officers Club Banquet Hall, Rajbari',
       notes: 'Stage setup & outdoor sunset couple portrait session included.',
     },
     items: [
@@ -118,7 +145,7 @@ export const getInitialInvoiceData = (): InvoiceData => {
       },
       {
         id: '3',
-        title: 'Premium Photo Album (12x24 inch)',
+        title: 'Exclusive Flush Mount Photo Album (12x24 inch)',
         description: '30 Pages flush mount album, leatherette box, metallic archival paper',
         quantity: 1,
         rate: 8000,
@@ -132,11 +159,15 @@ export const getInitialInvoiceData = (): InvoiceData => {
     signatureName: 'Rajin Ahamed',
     signatureTitle: 'Founder & Lead Cinematographer',
     paymentDetails: {
+      bankName: 'BRAC Bank',
+      bankAccountName: 'Rajin Traders',
+      bankAccountNumber: '2054833740001',
+      bankBranch: 'Rajbari',
+      bankDistrict: 'Rajbari',
       bKashNumber: '01740-744170 (Personal / Send Money)',
       nagadNumber: '01740-744170 (Personal)',
       rocketNumber: '01740-744170-4',
-      bankDetails: 'City Bank Ltd. | A/C: 1502... | Branch: Rajbari',
-      notes: 'Please share transaction ID or screenshot after payment for instant receipt confirmation.'
+      notes: 'Please share payment screenshot / transaction ID on WhatsApp (+880 1740-744170) for instant confirmation.'
     },
     showWatermark: false
   };

@@ -3,6 +3,7 @@ import {
   InvoiceData,
   InvoiceItem,
   InvoiceStatus,
+  PackageItem,
   TemplateTheme
 } from '../types/invoice';
 import {
@@ -22,19 +23,24 @@ import {
   Upload,
   RotateCcw,
   Palette,
-  FileText
+  FileText,
+  Landmark
 } from 'lucide-react';
 
 interface InvoiceFormProps {
   data: InvoiceData;
   onChange: (data: InvoiceData) => void;
   onReset: () => void;
+  onOpenPackageManager: () => void;
+  customPackages: PackageItem[];
 }
 
 export const InvoiceForm: React.FC<InvoiceFormProps> = ({
   data,
   onChange,
   onReset,
+  onOpenPackageManager,
+  customPackages,
 }) => {
   const [activeTab, setActiveTab] = useState<'client' | 'items' | 'payment' | 'branding' | 'terms'>('client');
 
@@ -78,11 +84,12 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
     updateField('items', newItems);
   };
 
-  const addItem = (preset?: { title: string; desc: string; rate: number }) => {
+  const addItem = (preset?: { title: string; desc?: string; description?: string; rate: number }) => {
+    const desc = preset?.desc || preset?.description || '';
     const newItem: InvoiceItem = {
       id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       title: preset ? preset.title : 'Custom Photography / Video Service',
-      description: preset ? preset.desc : '',
+      description: desc,
       quantity: 1,
       rate: preset ? preset.rate : 5000,
       total: preset ? preset.rate : 5000,
@@ -125,7 +132,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
       <div className="flex border-b border-[#2d2822] bg-[#12110f] overflow-x-auto scrollbar-none">
         <button
           onClick={() => setActiveTab('client')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
             activeTab === 'client'
               ? 'border-amber-500 text-amber-400 bg-amber-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -137,7 +144,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <button
           onClick={() => setActiveTab('items')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
             activeTab === 'items'
               ? 'border-amber-500 text-amber-400 bg-amber-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -149,19 +156,19 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <button
           onClick={() => setActiveTab('payment')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
             activeTab === 'payment'
               ? 'border-amber-500 text-amber-400 bg-amber-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
           <CreditCard className="w-4 h-4" />
-          Payment & Totals
+          BRAC Bank & Payments
         </button>
 
         <button
           onClick={() => setActiveTab('branding')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
             activeTab === 'branding'
               ? 'border-amber-500 text-amber-400 bg-amber-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -173,7 +180,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
         <button
           onClick={() => setActiveTab('terms')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
             activeTab === 'terms'
               ? 'border-amber-500 text-amber-400 bg-amber-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
@@ -200,7 +207,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Client Name / Couple Name *
                 </label>
                 <input
@@ -213,7 +220,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Client Phone Number *
                 </label>
                 <input
@@ -228,7 +235,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Client Email (Optional)
                 </label>
                 <input
@@ -241,7 +248,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Event Type
                 </label>
                 <input
@@ -256,7 +263,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Invoice Date
                 </label>
                 <input
@@ -268,7 +275,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-slate-300 mb-1">
                   Event Date / Due Date
                 </label>
                 <input
@@ -281,33 +288,33 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Event Venue / Location
               </label>
               <input
                 type="text"
                 value={data.client.eventVenue}
                 onChange={(e) => updateClient('eventVenue', e.target.value)}
-                placeholder="e.g. Rajbari Community Center / Officers Club"
+                placeholder="e.g. Officers Club Banquet Hall, Rajbari"
                 className="w-full bg-[#201d1a] border border-[#383129] rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Client Special Note / Request
               </label>
               <textarea
                 rows={2}
                 value={data.client.notes || ''}
                 onChange={(e) => updateClient('notes', e.target.value)}
-                placeholder="Any special remarks, coverage timings or specific client instructions..."
+                placeholder="Any special remarks or specific client instructions..."
                 className="w-full bg-[#201d1a] border border-[#383129] rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-amber-500 resize-none"
               />
             </div>
 
             <div className="pt-2">
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Invoice Status
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -318,7 +325,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                     onClick={() => updateField('status', st)}
                     className={`px-3 py-2 text-xs font-bold uppercase rounded-lg border transition-all ${
                       data.status === st
-                        ? 'bg-amber-500 text-black border-amber-400 font-extrabold shadow'
+                        ? 'bg-amber-500 text-black border-amber-400 font-black shadow'
                         : 'bg-[#201d1a] text-slate-300 border-[#383129] hover:bg-[#282420]'
                     }`}
                   >
@@ -333,14 +340,34 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         {/* TAB 2: SERVICES & ITEMS */}
         {activeTab === 'items' && (
           <div className="space-y-4">
+            {/* Top Package Manager Trigger */}
+            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                  <Package className="w-4 h-4" /> প্যাকেজ তৈরি & ম্যানেজ করুন
+                </p>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  আপনার কাস্টম প্যাকেজ তৈরি করে সরাসরি রেপোতে সেভ করুন
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenPackageManager}
+                className="px-3 py-1.5 rounded-lg bg-amber-500 text-black font-extrabold text-xs hover:bg-amber-400 transition-colors shrink-0 shadow"
+              >
+                প্যাকেজ স্টুডিও খুলুন
+              </button>
+            </div>
+
+            {/* Quick Presets */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                  <Sparkles className="w-4 h-4" /> Quick Add Service Preset
+                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" /> কুইক অ্যাড প্রিসেট
                 </h3>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {SERVICE_PRESETS.map((preset, idx) => (
+                {[...customPackages.slice(0, 4), ...SERVICE_PRESETS.slice(0, 4)].map((preset: any, idx) => (
                   <button
                     key={idx}
                     type="button"
@@ -349,7 +376,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                   >
                     <Plus className="w-3 h-3 text-amber-400" />
                     <span>{preset.title.split('(')[0]}</span>
-                    <span className="text-[10px] text-amber-400 font-mono">৳{preset.rate}</span>
+                    <span className="text-[10px] text-amber-400 font-mono font-bold">৳{preset.rate}</span>
                   </button>
                 ))}
               </div>
@@ -358,14 +385,14 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
             <div className="pt-2 border-t border-[#2d2822] space-y-3">
               <div className="flex items-center justify-between">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                  Invoice Items List
+                  ইনভয়েসের আইটেম তালিকা ({data.items.length})
                 </h4>
                 <button
                   type="button"
                   onClick={() => addItem()}
                   className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 transition-colors"
                 >
-                  <Plus className="w-3.5 h-3.5" /> Add Custom Item
+                  <Plus className="w-3.5 h-3.5" /> কাস্টম আইটেম যোগ করুন
                 </button>
               </div>
 
@@ -377,14 +404,14 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">
-                        Item #{index + 1} Title
+                        আইটেম #{index + 1} টাইটেল
                       </label>
                       <input
                         type="text"
                         value={item.title}
                         onChange={(e) => handleItemChange(index, 'title', e.target.value)}
-                        placeholder="Service name (e.g. Wedding Photography)"
-                        className="w-full bg-[#181614] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-semibold focus:outline-none focus:border-amber-500"
+                        placeholder="Service name (e.g. Full Day Wedding Photography)"
+                        className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 font-bold focus:outline-none focus:border-amber-500"
                       />
                     </div>
                     <button
@@ -399,33 +426,33 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
                   <div>
                     <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">
-                      Description / Package Details
+                      বিবরণ ও ডেলিভারেবলস
                     </label>
                     <textarea
                       rows={2}
                       value={item.description || ''}
                       onChange={(e) => handleItemChange(index, 'description', e.target.value)}
                       placeholder="e.g. 2 Photographers, Unlimited Raw Photos, 100 Edited..."
-                      className="w-full bg-[#181614] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-amber-500 resize-none"
+                      className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 resize-none leading-relaxed"
                     />
                   </div>
 
                   <div className="grid grid-cols-3 gap-2">
                     <div>
                       <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">
-                        Qty / Days
+                        পরিমাণ / দিন
                       </label>
                       <input
                         type="number"
                         min="1"
                         value={item.quantity}
                         onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                        className="w-full bg-[#181614] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                        className="w-full bg-[#181614] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-mono font-bold focus:outline-none focus:border-amber-500"
                       />
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">
-                        Rate (৳ BDT)
+                        রেট (৳ BDT)
                       </label>
                       <input
                         type="number"
@@ -433,14 +460,14 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                         step="100"
                         value={item.rate}
                         onChange={(e) => handleItemChange(index, 'rate', e.target.value)}
-                        className="w-full bg-[#181614] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                        className="w-full bg-[#181614] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100 font-mono font-bold focus:outline-none focus:border-amber-500"
                       />
                     </div>
                     <div>
                       <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">
-                        Line Total
+                        মোট (Total)
                       </label>
-                      <div className="w-full bg-[#141210] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs font-mono font-bold text-amber-400 flex items-center justify-end">
+                      <div className="w-full bg-[#141210] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs font-mono font-black text-amber-400 flex items-center justify-end">
                         ৳{new Intl.NumberFormat('en-IN').format(item.total)}
                       </div>
                     </div>
@@ -451,31 +478,135 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
           </div>
         )}
 
-        {/* TAB 3: PAYMENT & TOTALS */}
+        {/* TAB 3: PAYMENT & BRAC BANK */}
         {activeTab === 'payment' && (
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-[#2d2822]">
-              <CreditCard className="w-4 h-4" /> Discounts, Advance & Accounts
+              <Landmark className="w-4 h-4" /> BRAC Bank ও পেমেন্ট বিবরণী
             </h3>
 
-            {/* Discount & Advance */}
+            {/* BRAC Bank Section */}
             <div className="p-4 bg-[#201d1a] border border-[#383129] rounded-xl space-y-3">
-              <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                Financial Adjustments
+              <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                <Landmark className="w-4 h-4" /> ব্যাংক অ্যাকাউন্ট তথ্য (Bank Transfer)
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Discount Type
-                  </label>
+                  <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">ব্যাংকের নাম</label>
+                  <input
+                    type="text"
+                    value={data.paymentDetails.bankName}
+                    onChange={(e) => updatePaymentDetails('bankName', e.target.value)}
+                    placeholder="BRAC Bank"
+                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 font-bold focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Account Name</label>
+                  <input
+                    type="text"
+                    value={data.paymentDetails.bankAccountName}
+                    onChange={(e) => updatePaymentDetails('bankAccountName', e.target.value)}
+                    placeholder="Rajin Traders"
+                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 font-bold focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Account Number</label>
+                <input
+                  type="text"
+                  value={data.paymentDetails.bankAccountNumber}
+                  onChange={(e) => updatePaymentDetails('bankAccountNumber', e.target.value)}
+                  placeholder="2054833740001"
+                  className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 font-mono font-bold focus:outline-none focus:border-amber-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">Branch</label>
+                  <input
+                    type="text"
+                    value={data.paymentDetails.bankBranch}
+                    onChange={(e) => updatePaymentDetails('bankBranch', e.target.value)}
+                    placeholder="Rajbari"
+                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase text-slate-400 mb-1">District</label>
+                  <input
+                    type="text"
+                    value={data.paymentDetails.bankDistrict}
+                    onChange={(e) => updatePaymentDetails('bankDistrict', e.target.value)}
+                    placeholder="Rajbari"
+                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Banking (bKash & Nagad) */}
+            <div className="p-4 bg-[#201d1a] border border-[#383129] rounded-xl space-y-3">
+              <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                মোবাইল ব্যাংকিং (bKash & Nagad)
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-pink-400 mb-1">bKash Number</label>
+                  <input
+                    type="text"
+                    value={data.paymentDetails.bKashNumber}
+                    onChange={(e) => updatePaymentDetails('bKashNumber', e.target.value)}
+                    placeholder="01740-744170 (Personal)"
+                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-orange-400 mb-1">Nagad Number</label>
+                  <input
+                    type="text"
+                    value={data.paymentDetails.nagadNumber}
+                    onChange={(e) => updatePaymentDetails('nagadNumber', e.target.value)}
+                    placeholder="01740-744170 (Personal)"
+                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">Payment Instruction Note</label>
+                <input
+                  type="text"
+                  value={data.paymentDetails.notes}
+                  onChange={(e) => updatePaymentDetails('notes', e.target.value)}
+                  placeholder="e.g. Please share payment screenshot on WhatsApp..."
+                  className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
+                />
+              </div>
+            </div>
+
+            {/* Financial Adjustments */}
+            <div className="p-4 bg-[#201d1a] border border-[#383129] rounded-xl space-y-3">
+              <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                ডিসকাউন্ট ও অগ্রিম জমা (Financial Adjustments)
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">ডিসকাউন্ট টাইপ</label>
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => updateField('discountType', 'flat')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
+                      className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
                         data.discountType === 'flat'
-                          ? 'bg-amber-500 text-black border-amber-400 font-bold'
+                          ? 'bg-amber-500 text-black border-amber-400'
                           : 'bg-[#181614] text-slate-300 border-[#383129]'
                       }`}
                     >
@@ -484,9 +615,9 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                     <button
                       type="button"
                       onClick={() => updateField('discountType', 'percentage')}
-                      className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all ${
+                      className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all ${
                         data.discountType === 'percentage'
-                          ? 'bg-amber-500 text-black border-amber-400 font-bold'
+                          ? 'bg-amber-500 text-black border-amber-400'
                           : 'bg-[#181614] text-slate-300 border-[#383129]'
                       }`}
                     >
@@ -496,8 +627,8 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Discount Value {data.discountType === 'percentage' ? '(%)' : '(৳ BDT)'}
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    ডিসকাউন্ট পরিমাণ {data.discountType === 'percentage' ? '(%)' : '(৳ BDT)'}
                   </label>
                   <input
                     type="number"
@@ -510,77 +641,16 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Advance Amount Paid (৳ BDT)
+                <label className="block text-xs font-bold text-emerald-400 mb-1">
+                  অগ্রিম টাকা জমা (Advance Paid ৳)
                 </label>
                 <input
                   type="number"
                   min="0"
                   value={data.advancePaid}
                   onChange={(e) => updateField('advancePaid', Number(e.target.value) || 0)}
-                  placeholder="e.g. 15000"
-                  className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-sm text-slate-100 font-mono font-bold text-emerald-400 focus:outline-none focus:border-amber-500"
-                />
-              </div>
-            </div>
-
-            {/* Payment Methods */}
-            <div className="p-4 bg-[#201d1a] border border-[#383129] rounded-xl space-y-3">
-              <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                Payment Account Details (Shown on Invoice)
-              </h4>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-pink-400 mb-1">
-                    bKash Number
-                  </label>
-                  <input
-                    type="text"
-                    value={data.paymentDetails.bKashNumber}
-                    onChange={(e) => updatePaymentDetails('bKashNumber', e.target.value)}
-                    placeholder="017xxxxxxxx (Personal)"
-                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-medium text-orange-400 mb-1">
-                    Nagad Number
-                  </label>
-                  <input
-                    type="text"
-                    value={data.paymentDetails.nagadNumber}
-                    onChange={(e) => updatePaymentDetails('nagadNumber', e.target.value)}
-                    placeholder="017xxxxxxxx (Personal)"
-                    className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Bank Account Information
-                </label>
-                <input
-                  type="text"
-                  value={data.paymentDetails.bankDetails}
-                  onChange={(e) => updatePaymentDetails('bankDetails', e.target.value)}
-                  placeholder="Bank Name, Account Name, A/C Number, Branch"
-                  className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Payment Instruction Note
-                </label>
-                <input
-                  type="text"
-                  value={data.paymentDetails.notes}
-                  onChange={(e) => updatePaymentDetails('notes', e.target.value)}
-                  placeholder="e.g. Please share transaction screenshot on WhatsApp..."
-                  className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
+                  placeholder="e.g. 20000"
+                  className="w-full bg-[#181614] border border-[#383129] rounded-lg px-3 py-2 text-sm text-slate-100 font-mono font-black text-emerald-400 focus:outline-none focus:border-amber-500"
                 />
               </div>
             </div>
@@ -591,19 +661,19 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
         {activeTab === 'branding' && (
           <div className="space-y-4">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-[#2d2822]">
-              <Palette className="w-4 h-4" /> Invoice Styling & Dorpon Branding
+              <Palette className="w-4 h-4" /> থিম, লোগো ও ঠিকানা
             </h3>
 
             {/* Template Selector */}
             <div>
               <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
-                Choose Invoice Aesthetic
+                ইনভয়েস থিম সিলেক্ট করুন
               </label>
               <div className="grid grid-cols-2 gap-2.5">
                 {[
                   { id: 'luxury-gold', name: 'Luxury Gold', desc: 'Champagne & dark gold elegance' },
                   { id: 'cinematic-dark', name: 'Cinematic Dark', desc: 'Sleek film director vibe' },
-                  { id: 'royal-classic', name: 'Royal Teal & Navy', desc: 'Prestigious corporate style' },
+                  { id: 'royal-classic', name: 'Royal Classic', desc: 'Prestigious corporate style' },
                   { id: 'minimal-light', name: 'Minimal Studio', desc: 'Clean, bright white print style' },
                 ].map((tpl) => (
                   <button
@@ -627,7 +697,7 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
             <div className="pt-2 border-t border-[#2d2822]">
               <div className="flex items-center justify-between mb-2">
                 <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  Dorpon Logo Variations
+                  Dorpon লোগো সিলেক্ট করুন
                 </label>
                 <label className="cursor-pointer inline-flex items-center gap-1 text-[11px] font-semibold text-amber-400 hover:text-amber-300">
                   <Upload className="w-3.5 h-3.5" /> Upload Custom Logo
@@ -670,11 +740,22 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
               </div>
             </div>
 
-            {/* Business Contact Details */}
+            {/* Business Contact Details & Address */}
             <div className="pt-2 border-t border-[#2d2822] space-y-3">
               <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
-                Studio Contact & Info
+                Studio Contact & Address
               </label>
+
+              <div>
+                <label className="block text-[10px] uppercase text-slate-400 mb-1 font-bold">Studio Address *</label>
+                <input
+                  type="text"
+                  value={data.business.address}
+                  onChange={(e) => updateBusiness('address', e.target.value)}
+                  placeholder="Rajbari, Faridpur, Dhaka"
+                  className="w-full bg-[#201d1a] border border-[#383129] rounded-lg px-3 py-2 text-xs text-slate-100 font-bold focus:outline-none focus:border-amber-500"
+                />
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
@@ -713,27 +794,6 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
                     type="text"
                     value={data.business.phone}
                     onChange={(e) => updateBusiness('phone', e.target.value)}
-                    className="w-full bg-[#201d1a] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[10px] uppercase text-slate-400 mb-1">Email</label>
-                  <input
-                    type="email"
-                    value={data.business.email}
-                    onChange={(e) => updateBusiness('email', e.target.value)}
-                    className="w-full bg-[#201d1a] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] uppercase text-slate-400 mb-1">Address</label>
-                  <input
-                    type="text"
-                    value={data.business.address}
-                    onChange={(e) => updateBusiness('address', e.target.value)}
                     className="w-full bg-[#201d1a] border border-[#383129] rounded-lg px-2.5 py-1.5 text-xs text-slate-100"
                   />
                 </div>

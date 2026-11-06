@@ -1,32 +1,43 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { toJpeg, toBlob } from 'html-to-image';
 import confetti from 'canvas-confetti';
-import { InvoiceData } from './types/invoice';
-import { getInitialInvoiceData } from './data/defaults';
+import { InvoiceData, PackageItem } from './types/invoice';
+import { getInitialInvoiceData, INITIAL_PACKAGES } from './data/defaults';
 import { InvoicePreview } from './components/InvoicePreview';
 import { InvoiceForm } from './components/InvoiceForm';
 import { NetworkModal } from './components/NetworkModal';
 import { HistoryModal } from './components/HistoryModal';
+import { PackageManagerModal } from './components/PackageManagerModal';
+import { LoginScreen } from './components/LoginScreen';
 import {
   Download,
   Share2,
-  Copy,
   Printer,
   Smartphone,
   History,
   Eye,
   Edit3,
-  Sparkles,
   Camera,
   Check,
-  RotateCcw,
-  Plus
+  Package,
+  Lock,
+  GitBranch,
+  RefreshCw,
+  Sparkles
 } from 'lucide-react';
 
 const LOCAL_STORAGE_KEY = 'dorpon_invoice_current';
 const HISTORY_STORAGE_KEY = 'dorpon_invoice_history';
+const PACKAGES_STORAGE_KEY = 'dorpon_invoice_packages';
+const AUTH_SESSION_KEY = 'dorpon_invoice_auth';
 
 export function App() {
+  // Login Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return sessionStorage.getItem(AUTH_SESSION_KEY) === 'true';
+  });
+
+  // Current Invoice Data State
   const [invoiceData, setInvoiceData] = useState<InvoiceData>(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -36,6 +47,7 @@ export function App() {
     }
   });
 
+  // Saved Invoices History
   const [history, setHistory] = useState<InvoiceData[]>(() => {
     try {
       const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
@@ -45,14 +57,45 @@ export function App() {
     }
   });
 
-  // Mobile View Toggle: 'edit' or 'preview'
+  // Packages State
+  const [packages, setPackages] = useState<PackageItem[]>(() => {
+    try {
+      const saved = localStorage.getItem(PACKAGES_STORAGE_KEY);
+      return saved ? JSON.parse(saved) : INITIAL_PACKAGES;
+    } catch {
+      return INITIAL_PACKAGES;
+    }
+  });
+
+  // Modals & Tabs
   const [mobileTab, setMobileTab] = useState<'edit' | 'preview'>('edit');
   const [isGenerating, setIsGenerating] = useState(false);
   const [copiedImage, setCopiedImage] = useState(false);
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [isPackageManagerOpen, setIsPackageManagerOpen] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<string | null>(null);
 
   const previewRef = useRef<HTMLDivElement>(null);
+
+  // Initial Load from API (if backend is active)
+  useEffect(() => {
+    fetch('/api/data')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.packages && Array.isArray(data.packages) && data.packages.length > 0) {
+          setPackages(data.packages);
+          localStorage.setItem(PACKAGES_STORAGE_KEY, JSON.stringify(data.packages));
+        }
+        if (data.invoices && Array.isArray(data.invoices) && data.invoices.length > 0) {
+          setHistory(data.invoices);
+          localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(data.invoices));
+        }
+      })
+      .catch((err) => {
+        console.log('Local API sync offline or static mode:', err.message);
+      });
+  }, []);
 
   // Auto-save current invoice to localStorage
   useEffect(() => {
@@ -63,11 +106,66 @@ export function App() {
     }
   }, [invoiceData]);
 
+  // Sync to GitHub Repo Helper
+  const syncInvoiceToGitHub = async (inv: InvoiceData) => {
+    try {
+      setSyncStatus('Syncing to GitHub...');
+      const res = await fetch('/api/save-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ invoice: inv }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        setSyncStatus('Synced to GitHub!');
+        setTimeout(() => setSyncStatus(null), 3500);
+      }
+    } catch (e: any) {
+      console.warn('Sync warning:', e.message);
+      setSyncStatus(null);
+    }
+  };
+
+  const syncPackageToGitHub = async (pkg: PackageItem) => {
+    try {
+      setSyncStatus('Syncing Package to GitHub...');
+      const res = await fetch('/api/save-package', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ package: pkg }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        setSyncStatus('Package Synced to GitHub!');
+        setTimeout(() => setSyncStatus(null), 3500);
+      }
+    } catch (e: any) {
+      console.warn('Package sync warning:', e.message);
+      setSyncStatus(null);
+    }
+  };
+
+  const deletePackageFromGitHub = async (id: string) => {
+    try {
+      setSyncStatus('Deleting from GitHub...');
+      await fetch('/api/delete-package', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      setSyncStatus('Synced to GitHub!');
+      setTimeout(() => setSyncStatus(null), 3000);
+    } catch (e) {
+      console.warn(e);
+      setSyncStatus(null);
+    }
+  };
+
   // Save to History helper
   const saveToHistory = (dataToSave: InvoiceData) => {
     setHistory((prev) => {
       const filtered = prev.filter((item) => item.id !== dataToSave.id);
-      const updated = [dataToSave, ...filtered].slice(0, 50); // Keep max 50
+      const updated = [dataToSave, ...filtered].slice(0, 50);
       try {
         localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated));
       } catch (e) {
@@ -108,6 +206,48 @@ export function App() {
     });
   };
 
+  // Package Operations
+  const handleSavePackage = (pkg: PackageItem) => {
+    setPackages((prev) => {
+      const existingIdx = prev.findIndex((p) => p.id === pkg.id);
+      let updated: PackageItem[];
+      if (existingIdx >= 0) {
+        updated = [...prev];
+        updated[existingIdx] = pkg;
+      } else {
+        updated = [pkg, ...prev];
+      }
+      localStorage.setItem(PACKAGES_STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+
+    syncPackageToGitHub(pkg);
+  };
+
+  const handleDeletePackage = (id: string) => {
+    setPackages((prev) => {
+      const updated = prev.filter((p) => p.id !== id);
+      localStorage.setItem(PACKAGES_STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+    deletePackageFromGitHub(id);
+  };
+
+  const handleAddPackageToInvoice = (pkg: PackageItem) => {
+    const newItem = {
+      id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+      title: pkg.title,
+      description: pkg.description,
+      quantity: 1,
+      rate: pkg.rate,
+      total: pkg.rate,
+    };
+    handleDataChange({
+      ...invoiceData,
+      items: [...invoiceData.items, newItem],
+    });
+  };
+
   // High Resolution JPG Generation
   const exportAsJpg = async () => {
     const node = document.getElementById('invoice-capture-node');
@@ -119,10 +259,10 @@ export function App() {
     try {
       setIsGenerating(true);
 
-      // High-resolution export (2.5x pixel ratio for sharp crystal-clear typography)
+      // High-resolution export (2.6x pixel ratio for crystal-clear 300 DPI text)
       const dataUrl = await toJpeg(node, {
         quality: 0.95,
-        pixelRatio: 2.5,
+        pixelRatio: 2.6,
         backgroundColor: invoiceData.template === 'cinematic-dark' ? '#141210' : '#ffffff',
         cacheBust: true,
       });
@@ -148,6 +288,7 @@ export function App() {
       });
 
       saveToHistory(invoiceData);
+      syncInvoiceToGitHub(invoiceData);
     } catch (err) {
       console.error('Failed to export JPG:', err);
       alert('Could not export JPG. Please try again.');
@@ -166,7 +307,7 @@ export function App() {
 
       const blob = await toBlob(node, {
         quality: 0.95,
-        pixelRatio: 2.2,
+        pixelRatio: 2.3,
         backgroundColor: invoiceData.template === 'cinematic-dark' ? '#141210' : '#ffffff',
         cacheBust: true,
       });
@@ -184,12 +325,12 @@ export function App() {
           title: `Dorpon Invoice #${invoiceData.invoiceNumber}`,
           text: `Invoice from Dorpon Photography & Cinematography (rajinmd.com) for ${invoiceData.client.name}`,
         });
+        syncInvoiceToGitHub(invoiceData);
         return;
       }
 
       // Fallback to Clipboard copy if supported
       if (navigator.clipboard && window.ClipboardItem) {
-        // Most browsers require image/png for clipboard write
         const pngBlob = await toBlob(node, {
           pixelRatio: 2.0,
           backgroundColor: '#ffffff',
@@ -200,6 +341,7 @@ export function App() {
           ]);
           setCopiedImage(true);
           setTimeout(() => setCopiedImage(false), 2500);
+          syncInvoiceToGitHub(invoiceData);
           return;
         }
       }
@@ -220,6 +362,21 @@ export function App() {
     window.print();
   };
 
+  const handleLogout = () => {
+    sessionStorage.removeItem(AUTH_SESSION_KEY);
+    setIsAuthenticated(false);
+  };
+
+  const handleLoginSuccess = () => {
+    sessionStorage.setItem(AUTH_SESSION_KEY, 'true');
+    setIsAuthenticated(true);
+  };
+
+  // If not authenticated, render Login Screen
+  if (!isAuthenticated) {
+    return <LoginScreen onLoginSuccess={handleLoginSuccess} />;
+  }
+
   return (
     <div className="min-h-screen bg-[#0f0e0d] text-slate-100 flex flex-col font-sans">
       {/* Top Header Bar */}
@@ -238,6 +395,12 @@ export function App() {
                 <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   Invoice Studio
                 </span>
+                {syncStatus && (
+                  <span className="hidden md:inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse">
+                    <GitBranch className="w-3 h-3" />
+                    {syncStatus}
+                  </span>
+                )}
               </div>
               <a
                 href="https://rajinmd.com"
@@ -252,10 +415,23 @@ export function App() {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
+            {/* Packages Studio */}
+            <button
+              onClick={() => setIsPackageManagerOpen(true)}
+              className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#221e1a] hover:bg-[#2b2620] text-amber-300 border border-[#383129] text-xs font-bold flex items-center gap-1.5 transition-colors"
+              title="Manage Packages"
+            >
+              <Package className="w-4 h-4 text-amber-400" />
+              <span className="hidden sm:inline">প্যাকেজ</span>
+              <span className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold flex items-center justify-center">
+                {packages.length}
+              </span>
+            </button>
+
             {/* Phone/LAN Connect Button */}
             <button
               onClick={() => setIsNetworkModalOpen(true)}
-              className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#221e1a] hover:bg-[#2b2620] text-amber-400 border border-[#383129] text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              className="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#221e1a] hover:bg-[#2b2620] text-slate-300 border border-[#383129] text-xs font-semibold flex items-center gap-1.5 transition-colors"
               title="Test on Mobile via Local Wi-Fi"
             >
               <Smartphone className="w-4 h-4 text-emerald-400" />
@@ -311,11 +487,20 @@ export function App() {
               )}
               <span>{isGenerating ? 'তৈরি হচ্ছে...' : 'JPG ডাউনলোড'}</span>
             </button>
+
+            {/* Lock / Logout */}
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-xl bg-[#221e1a] hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 border border-[#383129] text-xs transition-colors"
+              title="Lock / Logout"
+            >
+              <Lock className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Navigation Tab Bar (Visible only on mobile/small screens) */}
+      {/* Mobile Navigation Tab Bar */}
       <div className="lg:hidden bg-[#161412] border-b border-[#2b2620] p-1.5 flex gap-1">
         <button
           onClick={() => setMobileTab('edit')}
@@ -353,6 +538,8 @@ export function App() {
             data={invoiceData}
             onChange={handleDataChange}
             onReset={handleReset}
+            onOpenPackageManager={() => setIsPackageManagerOpen(true)}
+            customPackages={packages}
           />
         </div>
 
@@ -366,16 +553,18 @@ export function App() {
           <div className="w-full flex items-center justify-between pb-3 px-1 text-xs text-slate-400">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>লাইভ প্রিভিউ (Live Preview)</span>
+              <span className="font-semibold text-slate-300">লাইভ প্রিভিউ (Live 300-DPI Preview)</span>
               <span className="opacity-40">|</span>
-              <span className="capitalize">{invoiceData.template.replace('-', ' ')}</span>
+              <span className="capitalize text-amber-400/90 font-medium">
+                {invoiceData.template.replace('-', ' ')}
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={handleShareOrCopy}
                 disabled={isGenerating}
-                className="text-xs text-emerald-400 hover:underline flex items-center gap-1"
+                className="text-xs text-emerald-400 hover:underline flex items-center gap-1 font-semibold"
               >
                 <Share2 className="w-3.5 h-3.5" />
                 <span>কপি / শেয়ার</span>
@@ -388,29 +577,29 @@ export function App() {
             <div
               className="origin-top transition-transform duration-200"
               style={{
-                // Responsive scaling for different screen sizes:
-                // Desktop: ~0.8-0.95 scale.
-                // Mobile: calculated or css scaled
-                transform: 'scale(var(--invoice-scale, 0.85))',
+                transform: 'scale(var(--invoice-scale, 0.82))',
                 transformOrigin: 'top center',
-                marginBottom: 'calc(-1130px * (1 - var(--invoice-scale, 0.85)))',
+                marginBottom: 'calc(-1200px * (1 - var(--invoice-scale, 0.82)))',
               }}
             >
               <style>{`
                 :root {
-                  --invoice-scale: 0.88;
+                  --invoice-scale: 0.82;
+                }
+                @media (max-width: 1400px) {
+                  :root { --invoice-scale: 0.76; }
                 }
                 @media (max-width: 1280px) {
-                  :root { --invoice-scale: 0.72; }
+                  :root { --invoice-scale: 0.70; }
                 }
                 @media (max-width: 1024px) {
-                  :root { --invoice-scale: 0.65; }
+                  :root { --invoice-scale: 0.62; }
                 }
                 @media (max-width: 640px) {
-                  :root { --invoice-scale: 0.44; }
+                  :root { --invoice-scale: 0.40; }
                 }
                 @media (max-width: 420px) {
-                  :root { --invoice-scale: 0.38; }
+                  :root { --invoice-scale: 0.35; }
                 }
               `}</style>
 
@@ -418,12 +607,12 @@ export function App() {
             </div>
           </div>
 
-          {/* Mobile Bottom Float Action (for easy access on phones) */}
+          {/* Mobile Bottom Float Action */}
           <div className="w-full mt-4 flex sm:hidden flex-col gap-2">
             <button
               onClick={exportAsJpg}
               disabled={isGenerating}
-              className="w-full py-3 rounded-xl bg-amber-500 text-black font-extrabold text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
+              className="w-full py-3 rounded-xl bg-amber-500 text-black font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
             >
               <Download className="w-4 h-4 stroke-[2.5]" />
               <span>JPG ফরমেটে ডাউনলোড করুন</span>
@@ -443,12 +632,12 @@ export function App() {
       {/* Footer Info */}
       <footer className="mt-auto border-t border-[#231f1a] py-4 px-4 text-center text-xs text-slate-500">
         <p>
-          দর্পণ (Dorpon) Photography & Cinematography Invoice Studio — Crafted for{' '}
+          দর্পণ (Dorpon) Photography & Cinematography Invoice Studio — Official Website:{' '}
           <a
             href="https://rajinmd.com"
             target="_blank"
             rel="noreferrer"
-            className="text-amber-400 hover:underline"
+            className="text-amber-400 hover:underline font-bold"
           >
             rajinmd.com
           </a>
@@ -471,6 +660,17 @@ export function App() {
         onSelect={(inv) => setInvoiceData(inv)}
         onDelete={handleDeleteHistory}
         onNew={handleNewInvoice}
+      />
+
+      {/* Package Manager Modal */}
+      <PackageManagerModal
+        isOpen={isPackageManagerOpen}
+        onClose={() => setIsPackageManagerOpen(false)}
+        packages={packages}
+        onAddPackageToInvoice={handleAddPackageToInvoice}
+        onSavePackage={handleSavePackage}
+        onDeletePackage={handleDeletePackage}
+        isSyncing={Boolean(syncStatus)}
       />
     </div>
   );

@@ -1,0 +1,66 @@
+[
+  {
+    "id": "pkg-1",
+    "title": "Full Day Wedding Photography (Premium)",
+    "description": "2 Senior Photographers, Unlimited Raw Shots, 100+ Master Edited High-Res Photos, Stage & Candid Coverage",
+    "rate": 22000,
+    "category": "Wedding",
+    "isCustom": false
+  },
+  {
+    "id": "pkg-2",
+    "title": "Cinematic Wedding Teaser & Film (4K)",
+    "description": "2 Cinematographers, Gimbal & Prime Lenses, 1-2 Min Instagram Teaser + 10-15 Min 4K Cinematic Highlights Film",
+    "rate": 25000,
+    "category": "Cinematography",
+    "isCustom": false
+  },
+  {
+    "id": "pkg-3",
+    "title": "Gaye Holud / Mehendi Night Package",
+    "description": "1 Senior Photographer + 1 Cinematographer, 4-5 Hours Event Coverage, Color Graded Reel & Photos",
+    "rate": 15000,
+    "category": "Holud",
+    "isCustom": false
+  },
+  {
+    "id": "pkg-4",
+    "title": "Reception Evening Grand Coverage",
+    "description": "2 Photographers + 1 Cinematographer, Stage, Couple & Guest Portraits, 80+ Retouched Photos",
+    "rate": 18000,
+    "category": "Reception",
+    "isCustom": false
+  },
+  {
+    "id": "pkg-5",
+    "title": "Exclusive Pre/Post Wedding Couple Shoot",
+    "description": "Stylized outdoor couple portrait session, 30 Fine Art Retouched Magazine-Style Photos",
+    "rate": 10000,
+    "category": "Portrait",
+    "isCustom": false
+  },
+  {
+    "id": "pkg-6",
+    "title": "Exclusive Flush Mount Photo Album (12x24 inch)",
+    "description": "30 Pages Hardbound, Velvet/Leatherette Box, Metallic Lamination, Archival Silk Paper",
+    "rate": 8000,
+    "category": "Album",
+    "isCustom": false
+  },
+  {
+    "id": "pkg-7",
+    "title": "4K Drone Aerial Cinematography",
+    "description": "FAA Certified Aerial Pilot, Venue Bird-Eye Views, Cinematic Flyover Angles & Ceremony Entrance",
+    "rate": 7000,
+    "category": "Drone",
+    "isCustom": false
+  },
+  {
+    "id": "pkg-8",
+    "title": "Traditional Long Ceremony Video Coverage",
+    "description": "Full unedited ceremony recording with high-fidelity lapel audio, delivered in 1080p HD",
+    "rate": 12000,
+    "category": "Video",
+    "isCustom": false
+  }
+]
