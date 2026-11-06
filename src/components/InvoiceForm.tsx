@@ -128,66 +128,76 @@ export const InvoiceForm: React.FC<InvoiceFormProps> = ({
 
   return (
     <div className="bg-[#181614] border border-[#2b2620] rounded-2xl overflow-hidden shadow-xl flex flex-col h-full text-slate-200">
-      {/* Tab Navigation */}
-      <div className="flex border-b border-[#2d2822] bg-[#12110f] overflow-x-auto scrollbar-none">
+      {/* Tab Navigation - 5 column grid so all tabs are visible and clickable on PC & Mobile */}
+      <div className="grid grid-cols-5 p-1.5 bg-[#12110f] border-b border-[#2d2822] gap-1">
         <button
+          type="button"
           onClick={() => setActiveTab('client')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 py-2.5 px-1 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'client'
-              ? 'border-amber-500 text-amber-400 bg-amber-500/10'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-amber-500 text-black shadow-md font-black'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-[#1f1c18]'
           }`}
+          title="Client & Event Info"
         >
-          <User className="w-4 h-4" />
-          Client & Event
+          <User className="w-4 h-4 shrink-0" />
+          <span className="truncate text-[11px] sm:text-xs">Client</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab('items')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 py-2.5 px-1 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'items'
-              ? 'border-amber-500 text-amber-400 bg-amber-500/10'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-amber-500 text-black shadow-md font-black'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-[#1f1c18]'
           }`}
+          title="Services & Packages"
         >
-          <Package className="w-4 h-4" />
-          Services ({data.items.length})
+          <Package className="w-4 h-4 shrink-0" />
+          <span className="truncate text-[11px] sm:text-xs">Services ({data.items.length})</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab('payment')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 py-2.5 px-1 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'payment'
-              ? 'border-amber-500 text-amber-400 bg-amber-500/10'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-amber-500 text-black shadow-md font-black'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-[#1f1c18]'
           }`}
+          title="BRAC Bank & Payments"
         >
-          <CreditCard className="w-4 h-4" />
-          BRAC Bank & Payments
+          <CreditCard className="w-4 h-4 shrink-0" />
+          <span className="truncate text-[11px] sm:text-xs">Payment</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab('branding')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 py-2.5 px-1 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'branding'
-              ? 'border-amber-500 text-amber-400 bg-amber-500/10'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-amber-500 text-black shadow-md font-black'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-[#1f1c18]'
           }`}
+          title="Theme & Logo"
         >
-          <Palette className="w-4 h-4" />
-          Theme & Logo
+          <Palette className="w-4 h-4 shrink-0" />
+          <span className="truncate text-[11px] sm:text-xs">Theme</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setActiveTab('terms')}
-          className={`flex items-center gap-2 px-4 py-3.5 text-xs font-bold whitespace-nowrap transition-colors border-b-2 ${
+          className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 py-2.5 px-1 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'terms'
-              ? 'border-amber-500 text-amber-400 bg-amber-500/10'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'bg-amber-500 text-black shadow-md font-black'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-[#1f1c18]'
           }`}
+          title="Terms & Signature"
         >
-          <FileText className="w-4 h-4" />
-          Terms & Sign
+          <FileText className="w-4 h-4 shrink-0" />
+          <span className="truncate text-[11px] sm:text-xs">Terms</span>
         </button>
       </div>
 

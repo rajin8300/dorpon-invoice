@@ -534,10 +534,10 @@ export function App() {
       </div>
 
       {/* Main Workspace Layout */}
-      <main className="flex-1 max-w-7xl mx-auto w-full p-3 sm:p-5 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <main className="flex-1 max-w-[1500px] mx-auto w-full p-3 sm:p-5 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT COLUMN: EDITOR FORM */}
         <div
-          className={`lg:col-span-6 xl:col-span-5 ${
+          className={`lg:col-span-6 xl:col-span-6 ${
             mobileTab === 'preview' ? 'hidden lg:block' : 'block'
           }`}
         >
@@ -552,7 +552,7 @@ export function App() {
 
         {/* RIGHT COLUMN: LIVE PREVIEW & EXPORT ACTIONS */}
         <div
-          className={`lg:col-span-6 xl:col-span-7 flex flex-col items-center ${
+          className={`lg:col-span-6 xl:col-span-6 flex flex-col items-center ${
             mobileTab === 'edit' ? 'hidden lg:flex' : 'flex'
           }`}
         >
