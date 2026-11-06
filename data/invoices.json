@@ -5,7 +5,7 @@
     "issueDate": "2026-11-06",
     "dueDate": "2026-11-20",
     "status": "booked",
-    "template": "luxury-gold",
+    "template": "cinematic-dark",
     "currency": "BDT ৳",
     "business": {
       "name": "দর্পণ — Dorpon",
@@ -16,7 +16,7 @@
       "address": "Rajbari, Faridpur, Dhaka",
       "facebook": "facebook.com/dorpon830",
       "instagram": "@rajin.830",
-      "logoType": "logo-gold.png"
+      "logoType": "logo-black.png"
     },
     "client": {
       "name": "Nafis & Sadia Wedding",
@@ -56,7 +56,7 @@
       "bankAccountNumber": "2054833740001",
       "bankBranch": "Rajbari",
       "bankDistrict": "Rajbari",
-      "bKashNumber": "01740-744170 (Personal / Send Money)",
+      "bKashNumber": "01740-744170 (Personal)",
       "nagadNumber": "01740-744170 (Personal)",
       "rocketNumber": "01740-744170-4",
       "notes": "Please share payment screenshot / transaction ID on WhatsApp (+880 1740-744170) for instant confirmation."
