@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "id": "test_inv_1",
+    "invoiceNumber": "DP-TEST-001",
+    "issueDate": "2026-11-06",
+    "dueDate": "2026-11-20",
+    "client": {
+      "name": "Test Sync Client",
+      "phone": "01700000000"
+    },
+    "items": [
+      {
+        "id": "1",
+        "title": "Test Service",
+        "rate": 1000,
+        "quantity": 1,
+        "total": 1000
+      }
+    ]
+  }
+]
