@@ -164,7 +164,7 @@ export const getInitialInvoiceData = (): InvoiceData => {
       bankAccountNumber: '2054833740001',
       bankBranch: 'Rajbari',
       bankDistrict: 'Rajbari',
-      bKashNumber: '01740-744170 (Personal / Send Money)',
+      bKashNumber: '01740-744170 (Personal)',
       nagadNumber: '01740-744170 (Personal)',
       rocketNumber: '01740-744170-4',
       notes: 'Please share payment screenshot / transaction ID on WhatsApp (+880 1740-744170) for instant confirmation.'

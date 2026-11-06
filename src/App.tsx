@@ -41,7 +41,14 @@ export function App() {
   const [invoiceData, setInvoiceData] = useState<InvoiceData>(() => {
     try {
       const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : getInitialInvoiceData();
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.paymentDetails?.bKashNumber) {
+          parsed.paymentDetails.bKashNumber = parsed.paymentDetails.bKashNumber.replace(/\s*\/\s*Send Money/gi, '');
+        }
+        return parsed;
+      }
+      return getInitialInvoiceData();
     } catch {
       return getInitialInvoiceData();
     }

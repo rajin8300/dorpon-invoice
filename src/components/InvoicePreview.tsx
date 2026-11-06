@@ -332,14 +332,18 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <div className="space-y-1.5 text-sm pt-1">
                   {paymentDetails.bKashNumber && (
                     <div className="flex items-center justify-between py-0.5">
-                      <span className="font-bold text-pink-600 dark:text-pink-400">bKash (Send Money):</span>
-                      <span className="font-mono font-bold text-base">{paymentDetails.bKashNumber}</span>
+                      <span className="font-bold text-pink-600 dark:text-pink-400">bKash:</span>
+                      <span className="font-mono font-bold text-base">
+                        {paymentDetails.bKashNumber.replace(/\s*\/\s*Send Money/gi, '')}
+                      </span>
                     </div>
                   )}
                   {paymentDetails.nagadNumber && (
                     <div className="flex items-center justify-between py-0.5">
-                      <span className="font-bold text-orange-600 dark:text-orange-400">Nagad (Send Money):</span>
-                      <span className="font-mono font-bold text-base">{paymentDetails.nagadNumber}</span>
+                      <span className="font-bold text-orange-600 dark:text-orange-400">Nagad:</span>
+                      <span className="font-mono font-bold text-base">
+                        {paymentDetails.nagadNumber.replace(/\s*\/\s*Send Money/gi, '')}
+                      </span>
                     </div>
                   )}
                   {paymentDetails.notes && (
