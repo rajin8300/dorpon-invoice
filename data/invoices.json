@@ -1,1 +1,66 @@
-[]
+[
+  {
+    "id": "inv_1793975434107",
+    "invoiceNumber": "DP-2026-666",
+    "issueDate": "2026-11-06",
+    "dueDate": "2026-11-20",
+    "status": "booked",
+    "template": "luxury-gold",
+    "currency": "BDT ৳",
+    "business": {
+      "name": "দর্পণ — Dorpon",
+      "tagline": "Photography & Cinematography",
+      "website": "rajinmd.com",
+      "phone": "01740-744170",
+      "email": "contact@rajinmd.com",
+      "address": "Rajbari, Faridpur, Dhaka",
+      "facebook": "facebook.com/dorpon830",
+      "instagram": "@rajin.830",
+      "logoType": "logo-gold.png"
+    },
+    "client": {
+      "name": "Nafis & Sadia Wedding",
+      "phone": "01812-345678",
+      "email": "client@gmail.com",
+      "eventType": "Wedding & Reception Coverage",
+      "eventDate": "2026-11-20",
+      "eventVenue": "Officers Club Banquet Hall, Rajbari",
+      "notes": "Stage setup & outdoor sunset couple portrait session included."
+    },
+    "items": [
+      {
+        "id": "1",
+        "title": "Full Day Wedding Photography (Premium)",
+        "description": "2 Senior Photographers, full ceremony coverage, 100+ master retouched photos, unlimited raw shots",
+        "quantity": 1,
+        "rate": 22000,
+        "total": 22000
+      }
+    ],
+    "discountType": "flat",
+    "discountValue": 3000,
+    "advancePaid": 25000,
+    "terms": [
+      "Booking confirmation requires 50% advance payment.",
+      "Remaining balance must be cleared on event day before wrap-up.",
+      "All edited high-resolution photos delivered within 15-21 working days.",
+      "Cinematic 4K teaser & full highlights delivered within 30-40 working days.",
+      "Raw files delivered via Portable SSD or Cloud Drive link.",
+      "Travel, food, and accommodation outside Rajbari to be borne by client."
+    ],
+    "signatureName": "Rajin Ahamed",
+    "signatureTitle": "Founder & Lead Cinematographer",
+    "paymentDetails": {
+      "bankName": "BRAC Bank",
+      "bankAccountName": "Rajin Traders",
+      "bankAccountNumber": "2054833740001",
+      "bankBranch": "Rajbari",
+      "bankDistrict": "Rajbari",
+      "bKashNumber": "01740-744170 (Personal / Send Money)",
+      "nagadNumber": "01740-744170 (Personal)",
+      "rocketNumber": "01740-744170-4",
+      "notes": "Please share payment screenshot / transaction ID on WhatsApp (+880 1740-744170) for instant confirmation."
+    },
+    "showWatermark": false
+  }
+]
