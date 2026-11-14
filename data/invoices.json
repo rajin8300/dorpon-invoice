@@ -2,9 +2,9 @@
   {
     "id": "inv_1793975434107",
     "invoiceNumber": "DP-2026-666",
-    "issueDate": "2026-11-06",
-    "dueDate": "2026-11-20",
-    "status": "booked",
+    "issueDate": "2026-11-14",
+    "dueDate": "2026-12-27",
+    "status": "partial",
     "template": "cinematic-dark",
     "currency": "BDT ৳",
     "business": {
@@ -16,36 +16,36 @@
       "address": "Rajbari, Faridpur, Dhaka",
       "facebook": "facebook.com/dorpon830",
       "instagram": "@rajin.830",
-      "logoType": "logo-black.png"
+      "logoType": "logo-cream.png"
     },
     "client": {
-      "name": "Nafis & Sadia Wedding",
-      "phone": "01812-345678",
+      "name": "Preetylata Pramanik",
+      "phone": "01321549577",
       "email": "client@gmail.com",
-      "eventType": "Wedding & Reception Coverage",
+      "eventType": "Music Video",
       "eventDate": "2026-11-20",
-      "eventVenue": "Officers Club Banquet Hall, Rajbari",
-      "notes": "Stage setup & outdoor sunset couple portrait session included."
+      "eventVenue": "Dhaka",
+      "notes": ""
     },
     "items": [
       {
         "id": "1",
-        "title": "Full Day Wedding Photography (Premium)",
-        "description": "2 Senior Photographers, full ceremony coverage, 100+ master retouched photos, unlimited raw shots",
+        "title": "Couple Music Video",
+        "description": "1 Senior Cinematographer (1 Music Video 15 Edited Photos)",
         "quantity": 1,
-        "rate": 22000,
-        "total": 22000
+        "rate": "10000",
+        "total": 10000
       }
     ],
     "discountType": "flat",
     "discountValue": 3000,
-    "advancePaid": 25000,
+    "advancePaid": 1000,
     "terms": [
-      "Booking confirmation requires 50% advance payment.",
+      "Booking confirmation requires 20% advance payment.",
       "Remaining balance must be cleared on event day before wrap-up.",
       "All edited high-resolution photos delivered within 15-21 working days.",
       "Cinematic 4K teaser & full highlights delivered within 30-40 working days.",
-      "Raw files delivered via Portable SSD or Cloud Drive link.",
+      "Raw files delivered via Cloud Drive link.",
       "Travel, food, and accommodation outside Rajbari to be borne by client."
     ],
     "signatureName": "Rajin Ahamed",
