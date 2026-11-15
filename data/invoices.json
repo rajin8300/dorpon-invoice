@@ -2,7 +2,7 @@
   {
     "id": "inv_1793975434107",
     "invoiceNumber": "DP-2026-666",
-    "issueDate": "2026-11-14",
+    "issueDate": "2026-12-11",
     "dueDate": "2026-12-27",
     "status": "partial",
     "template": "cinematic-dark",
@@ -21,7 +21,7 @@
     "client": {
       "name": "Preetylata Pramanik",
       "phone": "01321549577",
-      "email": "client@gmail.com",
+      "email": "",
       "eventType": "Music Video",
       "eventDate": "2026-11-20",
       "eventVenue": "Dhaka",
