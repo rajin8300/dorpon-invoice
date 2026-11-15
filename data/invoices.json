@@ -1,5 +1,69 @@
 [
   {
+    "id": "inv_1794739805429",
+    "invoiceNumber": "DP-2026-214",
+    "issueDate": "2026-11-15",
+    "dueDate": "2027-01-10",
+    "status": "partial",
+    "template": "cinematic-dark",
+    "currency": "BDT ৳",
+    "business": {
+      "name": "দর্পণ — Dorpon",
+      "tagline": "Photography & Cinematography",
+      "website": "rajinmd.com",
+      "phone": "01740-744170",
+      "email": "contact@rajinmd.com",
+      "address": "Rajbari, Faridpur, Dhaka",
+      "facebook": "facebook.com/dorpon830",
+      "instagram": "@rajin.830",
+      "logoType": "logo-cream.png"
+    },
+    "client": {
+      "name": "Preetylata Pramanik",
+      "phone": "01321549577",
+      "email": "",
+      "eventType": "Pre Weeding",
+      "eventDate": "2026-11-29",
+      "eventVenue": "Dhaka",
+      "notes": ""
+    },
+    "items": [
+      {
+        "id": "1",
+        "title": "Pre Weeding Shoot",
+        "description": "Pre wedding - Outdoor\n50 Pis Special Edit\n1 Cinematic Outdoor video (\n1 Photographer + 1 Cinematographer)",
+        "quantity": 1,
+        "rate": "15000",
+        "total": 15000
+      }
+    ],
+    "discountType": "flat",
+    "discountValue": 4000,
+    "advancePaid": 1000,
+    "terms": [
+      "Booking confirmation requires 20% advance payment.",
+      "Remaining balance must be cleared on event day before wrap-up.",
+      "All edited high-resolution photos delivered within 15-21 working days.",
+      "Cinematic 4K teaser & full highlights delivered within 30-40 working days.",
+      "Raw files delivered via Cloud Drive link.",
+      "Travel, food, and accommodation outside Rajbari to be borne by client."
+    ],
+    "signatureName": "Rajin Ahamed",
+    "signatureTitle": "Founder & Lead Cinematographer",
+    "paymentDetails": {
+      "bankName": "BRAC Bank",
+      "bankAccountName": "Rajin Traders",
+      "bankAccountNumber": "2054833740001",
+      "bankBranch": "Rajbari",
+      "bankDistrict": "Rajbari",
+      "bKashNumber": "01740-744170 (Personal)",
+      "nagadNumber": "01740-744170 (Personal)",
+      "rocketNumber": "01740-744170-4",
+      "notes": "Please share payment screenshot / transaction ID on WhatsApp (+880 1740-744170) for instant confirmation."
+    },
+    "showWatermark": false
+  },
+  {
     "id": "inv_1793975434107",
     "invoiceNumber": "DP-2026-666",
     "issueDate": "2026-12-11",
