@@ -1,5 +1,69 @@
 [
   {
+    "id": "inv_1794761851826",
+    "invoiceNumber": "DP-2026-307",
+    "issueDate": "2026-11-15",
+    "dueDate": "2026-12-05",
+    "status": "partial",
+    "template": "cinematic-dark",
+    "currency": "BDT ৳",
+    "business": {
+      "name": "দর্পণ — Dorpon",
+      "tagline": "Photography & Cinematography",
+      "website": "rajinmd.com",
+      "phone": "01740-744170",
+      "email": "contact@rajinmd.com",
+      "address": "Rajbari, Faridpur, Dhaka",
+      "facebook": "facebook.com/dorpon830",
+      "instagram": "@rajin.830",
+      "logoType": "logo-cream.png"
+    },
+    "client": {
+      "name": "Shaila Parvin Reya",
+      "phone": "0 1309-991921",
+      "email": "",
+      "eventType": "Weeding & Holud Sondha",
+      "eventDate": "2026-11-29",
+      "eventVenue": "Pangsha, Rajbari",
+      "notes": ""
+    },
+    "items": [
+      {
+        "id": "3",
+        "title": "Premium Pakage",
+        "description": "📅 Events\nকাঁচা হলুদ\nহলুদ সন্ধ্যা\nবিয়ের দিন\n👥 Team\n১ জন Photographer\n১ জন Cinematographer\n\n\nPhotography Delivery\n\n300+ Specially Edited Photos\n\nAll Raw Photos\n\n•\n\nVideo Delivery\n\nকাঁচা হলুদ – ১টি Short Video\n\nহলুদ সন্ধ্যা – ১টি Cinematic Trailer + ১টি Full Video\n\nবিয়ের দিন – ১টি Cinematic Video + ১টি Full Video",
+        "quantity": 1,
+        "rate": "20000",
+        "total": 20000
+      }
+    ],
+    "discountType": "flat",
+    "discountValue": 2000,
+    "advancePaid": 3000,
+    "terms": [
+      "Booking confirmation requires 20% advance payment.",
+      "Remaining balance must be cleared on event day before wrap-up.",
+      "All edited high-resolution photos delivered within 15-21 working days.",
+      "Cinematic 4K teaser & full highlights delivered within 30-40 working days.",
+      "Raw files delivered via Cloud Drive link.",
+      "Travel, food, and accommodation outside Rajbari to be borne by client."
+    ],
+    "signatureName": "Rajin Ahamed",
+    "signatureTitle": "Founder & Lead Cinematographer",
+    "paymentDetails": {
+      "bankName": "BRAC Bank",
+      "bankAccountName": "Rajin Traders",
+      "bankAccountNumber": "2054833740001",
+      "bankBranch": "Rajbari",
+      "bankDistrict": "Rajbari",
+      "bKashNumber": "01740-744170 (Personal)",
+      "nagadNumber": "01740-744170 (Personal)",
+      "rocketNumber": "01740-744170-4",
+      "notes": "Please share payment screenshot / transaction ID on WhatsApp (+880 1740-744170) for instant confirmation."
+    },
+    "showWatermark": false
+  },
+  {
     "id": "inv_1794739805429",
     "invoiceNumber": "DP-2026-214",
     "issueDate": "2026-11-15",
